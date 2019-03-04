@@ -18,6 +18,7 @@ ADDR3=192.168.100.14
 
 NAME=node1
 ADDR=192.168.100.12
+DATA_DIR=.
 
 if [ $# == 1 ]; then
     if [ $1 == 1 ]; then
@@ -36,11 +37,11 @@ else
     usage
 fi
 
-etcd --name $NAME --data-dir ./etcd.$NAME \
+etcd --name $NAME --data-dir $DATA_DIR/etcd.$NAME \
     --initial-advertise-peer-urls http://$ADDR:2380 \
     --listen-peer-urls http://$ADDR:2380 \
     --listen-client-urls http://$ADDR:2379,http://127.0.0.1:2379 \
     --advertise-client-urls http://$ADDR:2379 \
     --initial-cluster-token etcd-cluster-1 \
     --initial-cluster $NAME1=http://$ADDR1:2380,$NAME2=http://$ADDR2:2380,$NAME3=http://$ADDR3:2380 \
-    --initial-cluster-state new > /tmp/etcd.$NAME.log 2>&1 &
+    --initial-cluster-state new > $DATA_DIR/etcd.$NAME.log 2>&1 &
